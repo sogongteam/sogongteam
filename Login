@@ -1,0 +1,84 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+#include "SE.h"
+
+FILE* fp = NULL;
+char buff[passwordSize+1];
+char inputPassword[passwordSize+1];
+
+void main()
+{
+  int login;
+	int menuChoice = 0;
+
+	fp = fopen("address_book.txt","r+");
+	if(fp == NULL) {
+		printf("일치하는 주소록이 없습니다.\n");
+		return ;}
+	fgets(buff, sizeof(int)*passwordSize, fp);
+		
+	printf("주소록 시스템에 오신걸 환영합니다.\n\n");
+
+	do { login = Login(); }while( login == FALSE );
+
+	printf("로그인에 성공하였습니다!\n\n");
+		
+	while( login == TRUE && menuChoice != 8 ) {
+		PrintMenu();
+		scanf("%d",&menuChoice);
+		switch(menuChoice) {
+		case 1: break;
+		case 2: break;
+		case 3: break;
+		case 4: break;
+		case 5: break;
+		case 6: break;
+		case 7: break;
+		case 8: break;
+		default: printf("잘못 입력하셨습니다.\n");
+		}}
+
+	fclose(fp);
+}
+
+int Login()
+{	
+	printf("사용자의 비밀번호를 입력하세요: ");
+	gets(inputPassword);
+
+	while( IsValidPassword() == FALSE ) {
+		printf("비밀번호는 네 자리로 입력해주세요\n");
+		printf("사용자의 비밀번호를 입력하세요: ");
+		gets(inputPassword); }
+
+	if( strcmp(buff,inputPassword) != 0 ) {
+		printf("비밀번호가 일치하지 않습니다.\n");
+		return FALSE; }
+	else return TRUE;
+
+}
+
+int IsValidPassword()
+{
+	int isValid;
+	
+	if(strlen(inputPassword) != passwordSize)
+		isValid = FALSE;
+	else isValid = TRUE;
+
+	return isValid;
+}
+
+void PrintMenu()
+{
+	printf("1. 주소록 전체보기\n");
+	printf("2. 주소록 추가\n");
+	printf("3. 주소록 수정\n");
+	printf("4. 주소록 삭제\n");
+	printf("5. 주소록 검색\n");
+	printf("6. 비밀번호 변경\n");
+	printf("7. 로그아웃\n");
+	printf("8. 종료\n");
+}

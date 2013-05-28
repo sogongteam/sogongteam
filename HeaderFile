@@ -1,0 +1,22 @@
+#define passwordSize 4
+#define TRUE 0
+#define FALSE 1
+
+
+typedef struct contact {
+  char* firstName;
+	char* lastName;
+	char* position;
+	char* department;
+	char* companyName;
+	char* address;
+	char* phoneNumber;
+	char* faxNumber;
+	char* mobileNumber;
+	char* e_mail;
+	char* homepage;
+	} Contact;
+
+int Login();
+int IsValidPassword();
+void PrintMenu();
