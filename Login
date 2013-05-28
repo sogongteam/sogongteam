@@ -132,6 +132,45 @@ int IsValidPassword()
 
 void listAddress()
 {
+	node *p1;
+	node *p2;
+	node *p3;
+	int count = 0;
+	int i, j;
+	
+	p1 = head->next;
+	while(p1 !=tail)	//총 주소록 수 구하기
+	{
+		count++;
+		p1 = p1->next;
+	}
+	
+	for(i=1; i<count; i++)
+	{
+		p1 = head;
+		p2 = head->next;
+		p3 = p2->next;
+		
+		for(j=1; j<=(count-1); j++)
+		{
+			if(strcmp(p2->sAddress, p3->sAddress) < 0)	//문자열 비교(오름차순)
+			{
+				p2->next = p3->next;
+				p3->next = p2;
+				p1->next = p3;
+				p1 = p3;
+				p3 = p2->next;
+			}
+			else
+			{
+				p1 = p2;
+				p2 = p3;
+				p3 = p3->next;
+			}
+		}
+	}
+	system("cls");
+	printf("주소록 전체보기\n");
 	
 }
 void addAddress()
