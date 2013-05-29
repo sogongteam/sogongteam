@@ -1,4 +1,4 @@
-#define passwordSize 4
+#define PASSWORDSIZE 4
 #define TRUE 0
 #define FALSE 1
 
