@@ -21,7 +21,6 @@ typedef struct contact  // 주소록 정보
   char mobilePhone[12];	//휴대전화번호
   char email[40];		//E-mail
   char homepage[50];	//홈페이지
-  char CheckedNum;		//선택한 번호
 } Contact;
 
 int loginState = FALSE;
@@ -45,15 +44,14 @@ int login();
 int isValidPassword();
 void linkedListInit();
 void viewAllContacts();
-void printContactList();
 void addContact();
-void modifyAddress();
-void deleteAddress();
-void findAddress();
+int searchName();
+void modifyContact();
+void deleteContact();
+void findContact();
 void changePassword();
 void logout();
 int printMainMenu();
-void changePassword();
 
 int isEmpty()
 {
@@ -211,70 +209,62 @@ void addContact()
 	}
 	Sleep(1000);	//1초(1000) 딜레이	
 }
-/*
-void modifyAddress(){
+
+void modifyContact(){
 	Node *t;
-	Contact *pContact;
+	int match;
+	char lName[15];
+	char fName[5];
+	int CheckedNum = 0;
 	char temp;
-	char lastName[5];	//성
-	char firstName[15];	//(성 제외)이름
-	char position[20];		//직책
-	char department[20];	//부서
-	char company[20];	//회사명
-	char homeAddress[60];	//주소
-	char homePhone[11];	//전화번호
-	char faxNumber[11];	//팩스번호
-	char mobilePhone[12];	//휴대전화번호
-	char email[40];		//E-mail
-	char homepage[50];	//홈페이지
-	char CheckedNum;
-	
-	t = isFull()
-	if( t == NULL ) {
-		printf("더 이상 저장할 공간이 없습니다.\n");
-		system("cls");
-	}
-	
-	pContact = (Contact *)malloc(sizeof(Contact));
-	char SearchName;
 
-
-	t = (node *)malloc(sizeof(node));
-	pContact = (address *)malloc(sizeof(address));
-	
 	system("cls");
 	
-	searchpersonMenu();	//한글자이름명단
+	match = searchName();	//한글자이름명단
 
-	printf("출력된 항목 중 수정하고자 하는 이름을 입력하세요\n");
-	scanf//이름 받기
+	if(match == FALSE) return;
+
+	printf("\n출력된 항목 중 수정하고자 하는 이름을 입력하세요\n(단, 성과 이름을 구분해서 입력. 예:강 하나)\n");
+	scanf("%s",lName);
+	scanf("%s",fName);
 	//받은 이름에 대하여 
 
-	printf("어떤 항목을 수정하겠습니까\n");
-	scanf("%s",CheckedNum);
+	t = head->next;
+	while( t!= tail )
+		if(strcmp(t->sContact.lastName,lName)==0 && strcmp(t->sContact.firstName,fName)==0)
+			break;
+		else t = t->next;
+
+	printf("어떤 항목을 수정하겠습니까?\n");
+	printf("1. 성\n2. (성 제외) 이름\n3. 직책\n4. 부서\n5. 회사명\n6. 주소\n7. 전화번호\n");
+	printf("8. 팩스번호\n9. 휴대전화번호\n10. E-mail\n11. 홈페이지\n");
+	scanf("%d",&CheckedNum);
+
 	switch(CheckedNum) {
-		case '1':
-		printf("1. 성 : "); gets("%s", pContact->lastName); break;
-		case '2':
-		printf("2. (성 제외) 이름 : "); gets("%s", pContact->firstName); break;
-		case '3':
-		printf("3. 직책 : "); gets("%s", pContact->position); break;
-		case '4':
-		printf("4. 부서 : "); gets("%s", pContact->department); break;
-		case '5':
-		printf("5. 회사명 : "); gets("%s", pContact->company); break;
-		case '6':
-		printf("6. 주소 : "); gets("%s", pContact->homeAddress); break;
-		case '7':
-		printf("7. 전화번호 : "); gets("%s", pContact->homePhone); break;
-		case '8':
-		printf("8. 팩스번호 : "); gets("%s", pContact->faxNumber); break;
-		case '9':
-		printf("9. 휴대전화번호 : "); gets("%s", pContact->mobilePhone); break;
-		case '10':
-		printf("10. E-mail : "); gets("%s", pContact->email); break;
-		case '11':
-		printf("11. 홈페이지 : "); gets("%s", pContact->homepage); break;
+		case 1:
+			fflush(stdin); printf("1. 성 : "); gets(t->sContact.lastName); break;
+		case 2:
+			fflush(stdin); printf("2. (성 제외) 이름 : "); gets(t->sContact.firstName); break;
+		case 3:
+			fflush(stdin); printf("3. 직책 : "); gets(t->sContact.position); break;
+		case 4:
+			fflush(stdin); printf("4. 부서 : "); gets(t->sContact.department); break;
+		case 5:
+			fflush(stdin); printf("5. 회사명 : "); gets(t->sContact.company); break;
+		case 6:
+			fflush(stdin); printf("6. 주소 : "); gets(t->sContact.address); break;
+		case 7:
+			fflush(stdin); printf("7. 전화번호 : "); gets(t->sContact.homePhone); break;
+		case 8:
+			fflush(stdin); printf("8. 팩스번호 : "); gets(t->sContact.faxNumber); break;
+		case 9:
+			fflush(stdin); printf("9. 휴대전화번호 : "); gets(t->sContact.mobilePhone); break;
+		case 10:
+			fflush(stdin); printf("10. E-mail : "); gets(t->sContact.email); break;
+		case 11:
+			fflush(stdin); printf("11. 홈페이지 : "); gets(t->sContact.homepage); break;
+		default:
+			fflush(stdin); printf("잘못 누르셨습니다."); return;
 	}
 
 	printf("정말로 수정하시겠습니까? (y/n) : "); //수정해야 함 
@@ -282,27 +272,19 @@ void modifyAddress(){
 	
 	if(temp == 'y' || temp == 'Y')
 	{
-		if(head->next == tail)
-		{
-			t->next = tail; //데이터가 없을 경우, head와 tail 사이에 직접 삽입
-		}
-		else
-		{
-			t->next = head->next;
-		}
-		head->next = t;
 		system("cls");
 		printf("수정이 정상적으로 완료되었습니다.\n");
 	}
 	else
 	{
 		free(t);
-		free(pContact);
 		system("cls");
 		printf("수정을 취소하였습니다.\n");
 	}
 	Sleep(1000);	//1초(1000) 딜레이	
 }
+
+/*
 
 void deleteAddress(){
 	node *t;
@@ -396,6 +378,41 @@ printf("수정하고자 하는 이름 중 한 글자를 입력하세요\n");
 
 
 }*/
+
+int searchName()
+{
+	Node *tempNode;
+	char *name;
+	int result = FALSE;
+	
+	tempNode = head->next;
+	name = (char*)malloc(sizeof(char)*2);
+
+	printf("찾고자 하는 이름 중 한 글자를 입력하세요 : ");
+	gets(name);
+
+	if( isEmpty() == TRUE )
+	{
+		printf("고객 정보가 존재하지 않습니다. \n");
+		result = FALSE;
+	}
+	else {
+		printf("%s을(를) 포함하는 명단은\n",name);
+		while( tempNode != tail ) {
+			if( (strcmp(tempNode->sContact.lastName,name) == 0) ||
+				(strpbrk(tempNode->sContact.firstName,name) != NULL) ) {
+					result = TRUE;
+					printf("\t\t%s %s\n",tempNode->sContact.lastName,
+						tempNode->sContact.firstName);}
+					tempNode = tempNode->next; }
+		if(result == TRUE) printf("입니다.\n");
+		if( tempNode == tail && result == FALSE ) {
+			printf("존재하지 않습니다.");
+			Sleep(1000);
+			result = FALSE;}
+	}
+	return result;
+}
 
 void changePassword()
 {
@@ -498,14 +515,14 @@ label :
 		case 2: 
 		  addContact(); //주소록 추가
 		  break;
-	/*	case 3: 
-		  modifyAddress(); //주소록 수정
+		case 3: 
+		  modifyContact(); //주소록 수정
 		  break;
-		case 4: 
-		  deleteAddress(); //주소록 삭제
+	/*	case 4: 
+		  deleteContact(); //주소록 삭제
 		  break;
 		case 5: 
-		  findAddress(); //주소록 검색
+		  findContact(); //주소록 검색
 		  break;*/
 		case 6: 
 		  changePassword(); //비밀번호 변경
