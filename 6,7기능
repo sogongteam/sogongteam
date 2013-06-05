@@ -28,7 +28,7 @@ int loginState = FALSE;
 
 typedef struct node
 {
-  Contact *sContact;
+  Contact sContact;
   struct node *next;
 } Node;
 
@@ -57,7 +57,7 @@ void changePassword();
 
 int isEmpty()
 {
-	if( head->next == tail->next ) 
+	if( head->next == tail ) 
 		return TRUE;
 	else return FALSE;
 }
@@ -109,53 +109,6 @@ void linkedListInit()
 
 void viewAllContacts()
 {
-	Node *p1;
-	Node *p2;
-	Node *p3;
-	int contactCount = 0;
-	int i, j;
-	
-	p1 = head->next;
-	while(p1 != tail )	//총 주소록 수 구하기
-	{
-		contactCount++;
-		p1 = p1->next;
-	}
-	
-	for(i=1; i<contactCount; i++)
-	{
-		p1 = head;
-		p2 = head->next;
-		p3 = p2->next;
-		
-		for(j=1; j<contactCount; j++)
-		{
-			if(strcmp(p2->sContact->lastName, p3->sContact->lastName) < 0 && strcmp(p2->sContact->firstName, p3->sContact->firstName) < 0)	//문자열 비교(오름차순)
-			{
-				p2->next = p3->next;
-				p3->next = p2;
-				p1->next = p3;
-				p1 = p3;
-				p3 = p2->next;
-			}
-			else
-			{
-				p1 = p2;
-				p2 = p3;
-				p3 = p3->next;
-			}
-		}
-	}
-
-	system("cls");
-	printContactList();	//리스트 출력
-	
-	getch();
-	
-}
-
-void printContactList()
-{
 	Node *p;
 	int k=1;
 
@@ -175,49 +128,41 @@ void printContactList()
 			p = p->next;
 		}
 		printf("----------------------------------\n");
-	}	
+	}
+	
+	getch();
 }
 
 void addContact()
 {
 	Node *t;
-	Contact *pContact;
+	Node *searchNode;
+	Node *searchPreNode;
+	Contact pContact;
 	char temp;
-	char lastName[5];		//성
-	char firstName[15];		//(성 제외)이름
-	char position[20];		//직책
-	char department[20];	//부서
-	char company[20];		//회사명
-	char address[60];		//주소
-	char homePhone[11];		//전화번호
-	char faxNumber[11];		//팩스번호
-	char mobilePhone[12];	//휴대전화번호
-	char email[40];			//E-mail
-	char homepage[50];		//홈페이지
-		
+	
+	searchNode = searchPreNode = head->next;
 	t = isFull();
 
 	if( t == NULL ) {
 		printf("더 이상 저장할 공간이 없습니다.\n");
 		system("cls");
 	}
-
-	pContact = (Contact *)malloc(sizeof(Contact));
 	
 	system("cls"); ///
 	printf("주소록 추가\n");
 	printf("----------------------------------\n");
-	printf("1. 성 : "); gets(pContact->lastName);
-	printf("2. (성 제외) 이름 : "); gets(pContact->firstName);
-	printf("3. 직책 : "); gets(pContact->position);
-	printf("4. 부서 : "); gets(pContact->department);
-	printf("5. 회사명 : "); gets(pContact->company);
-	printf("6. 주소 : "); gets(pContact->address);
-	printf("7. 전화번호 : "); gets(pContact->homePhone);
-	printf("8. 팩스번호 : "); gets(pContact->faxNumber);
-	printf("9. 휴대전화번호 : "); gets(pContact->mobilePhone);
-	printf("10. E-mail : "); gets(pContact->email);
-	printf("11. 홈페이지 : "); gets(pContact->homepage);
+	printf("1. 성 : "); gets(pContact.lastName);
+	printf("2. (성 제외) 이름 : "); gets(pContact.firstName);
+	printf("3. 직책 : "); gets(pContact.position);
+	printf("4. 부서 : "); gets(pContact.department);
+	printf("5. 회사명 : "); gets(pContact.company);
+	printf("6. 주소 : "); gets(pContact.address);
+	printf("7. 전화번호 : "); gets(pContact.homePhone);
+	printf("8. 팩스번호 : "); gets(pContact.faxNumber);
+	printf("9. 휴대전화번호 : "); gets(pContact.mobilePhone);
+	printf("10. E-mail : "); gets(pContact.email);
+	printf("11. 홈페이지 : "); gets(pContact.homepage);
 	printf("----------------------------------\n\n");
 	
 	t->sContact = pContact;
@@ -227,22 +172,39 @@ void addContact()
 	
 	if(temp == 'y' || temp == 'Y')
 	{
-		if(head->next == tail)
+		if( isEmpty() == TRUE )
 		{
+			head->next = t;
 			t->next = tail; //데이터가 없을 경우, head와 tail 사이에 직접 삽입
 		}
 		else
 		{
-			t->next = head->next;
+			while( searchNode != tail ) {printf("whilein");Sleep(1000);
+				if((strcmp(searchNode->sContact.lastName,t->sContact.lastName)<0) ||
+					((strcmp(searchNode->sContact.lastName,t->sContact.lastName)==0) && (strcmp(searchNode->sContact.firstName,t->sContact.firstName)<0)))
+				{	searchPreNode = searchNode;
+					searchNode = searchNode->next;}
+				else break;}
+			if( searchNode == head->next ) {
+				t->next = head->next;
+				head->next = t;
+			}
+			else if( searchNode == tail ) {
+				searchPreNode->next = t;
+				t->next = tail;
+			}
+			else {
+				t->next = searchNode;
+				searchPreNode->next = t;
+			}
 		}
-		head->next = t;
+	
 		system("cls");
 		printf("등록이 정상적으로 완료되었습니다.\n");
 	}
 	else
 	{
 		free(t);
-		free(pContact);
 		system("cls");
 		printf("등록을 취소하였습니다.\n");
 	}
