@@ -185,15 +185,15 @@ void addContact()
 				{	searchPreNode = searchNode;
 					searchNode = searchNode->next;}
 				else break;}
-			if( searchNode == head->next ) {
+			if( searchNode == head->next ) {	// 가나다 순서로 가장 앞에 와야 할 때
 				t->next = head->next;
 				head->next = t;
 			}
-			else if( searchNode == tail ) {
+			else if( searchNode == tail ) {		// 가나다 순서로 가장 끝에 와야 할 때
 				searchPreNode->next = t;
 				t->next = tail;
 			}
-			else {
+			else {					// 중간에 삽입될 때
 				t->next = searchNode;
 				searchPreNode->next = t;
 			}
