@@ -124,7 +124,7 @@ void viewAllContacts()
 		printf("번호 성\t이름\t휴대전화번호\n");
 		while( p!=tail )
 		{
-			printf(" %d %4s %4s %7s\n", k++, p->sContact->lastName, p->sContact->firstName, p->sContact->mobilePhone);
+			printf(" %d %4s %4s %7s\n", k++, p->sContact.lastName, p->sContact.firstName, p->sContact.mobilePhone);
 			p = p->next;
 		}
 		printf("----------------------------------\n");
