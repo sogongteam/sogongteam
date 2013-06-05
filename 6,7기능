@@ -179,7 +179,7 @@ void addContact()
 		}
 		else
 		{
-			while( searchNode != tail ) {printf("whilein");Sleep(1000);
+			while( searchNode != tail ) {
 				if((strcmp(searchNode->sContact.lastName,t->sContact.lastName)<0) ||
 					((strcmp(searchNode->sContact.lastName,t->sContact.lastName)==0) && (strcmp(searchNode->sContact.firstName,t->sContact.firstName)<0)))
 				{	searchPreNode = searchNode;
