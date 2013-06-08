@@ -565,7 +565,7 @@ label :
 		case 2: 
 		  addContact(); //주소록 추가
 		  break;
-		case 3: 
+		/*case 3: 
 		  modifyAddress(); //주소록 수정
 		  break;
 		case 4: 
@@ -573,7 +573,7 @@ label :
 		  break;
 		case 5: 
 		  findAddress(); //주소록 검색
-		  break;
+		  break;*/
 		case 6: 
 		  changePassword(); //비밀번호 변경
 		  break;
